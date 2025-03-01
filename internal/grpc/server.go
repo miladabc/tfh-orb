@@ -9,8 +9,8 @@ import (
 )
 
 type Server struct {
-	cfg Config
-	gs  *grpc.Server
+	cfg  Config
+	Grpc *grpc.Server
 }
 
 type Config struct {
@@ -20,8 +20,8 @@ type Config struct {
 
 func New(cfg Config) *Server {
 	return &Server{
-		cfg: cfg,
-		gs:  grpc.NewServer(),
+		cfg:  cfg,
+		Grpc: grpc.NewServer(),
 	}
 }
 
@@ -31,7 +31,7 @@ func (s *Server) Start() error {
 		return fmt.Errorf("starting listener: %w", err)
 	}
 
-	err = s.gs.Serve(listener)
+	err = s.Grpc.Serve(listener)
 	if err != nil && !errors.Is(err, grpc.ErrServerStopped) {
 		return fmt.Errorf("starting server: %w", err)
 	}
@@ -40,5 +40,5 @@ func (s *Server) Start() error {
 }
 
 func (s *Server) Stop() {
-	s.gs.GracefulStop()
+	s.Grpc.GracefulStop()
 }

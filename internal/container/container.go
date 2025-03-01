@@ -4,6 +4,7 @@ import (
 	"github.com/miladabc/tfh-orb/internal/config"
 	"github.com/miladabc/tfh-orb/internal/grpc"
 	"github.com/miladabc/tfh-orb/internal/log"
+	"github.com/miladabc/tfh-orb/internal/orb"
 )
 
 type Container struct {
@@ -28,6 +29,8 @@ func (c *Container) Init() error {
 
 	c.InitGrpcServer()
 
+	c.InitOrbApp()
+
 	return nil
 }
 
@@ -51,6 +54,10 @@ func (c *Container) InitGrpcServer() {
 	}
 
 	c.GrpcServer = grpc.New(c.Config.GrpcServer)
+}
+
+func (c *Container) InitOrbApp() {
+	orb.Init(c.GrpcServer)
 }
 
 func (c *Container) Shutdown() {

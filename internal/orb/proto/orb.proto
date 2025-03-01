@@ -1,0 +1,39 @@
+syntax = "proto3";
+package orb.v1;
+
+option go_package = "github.com/miladabc/tfh-orb/internal/orb/proto";
+
+service OrbManagerService {
+  // SendHeartbeat accepts a heartbeat message from an Orb device
+  rpc SendHeartbeat(SendHeartbeatRequest) returns (SendHeartbeatResponse) {}
+
+  // GetLatestLocation returns the most recent location for a specified device
+  rpc GetLatestLocation(GetLatestLocationRequest) returns (GetLatestLocationResponse) {}
+}
+
+// SendHeartbeatRequest contains the device identifier, location, and timestamp
+message SendHeartbeatRequest {
+  string device_id = 1;
+  double latitude = 2;
+  double longitude = 3;
+  string timestamp = 4;
+}
+
+// SendHeartbeatResponse indicates if the heartbeat was processed successfully
+message SendHeartbeatResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// GetLatestLocationRequest contains the device identifier to look up
+message GetLatestLocationRequest {
+  string device_id = 1;
+}
+
+// GetLatestLocationResponse contains the latest location data for a device if found
+message GetLatestLocationResponse {
+  bool found = 1;
+  double latitude = 2;
+  double longitude = 3;
+  string timestamp = 4;
+}
