@@ -1,0 +1,45 @@
+name: ci
+
+on: push
+
+permissions:
+  contents: read
+
+env:
+  GO_VERSION: 1.23.5
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: golang:1.23.5-alpine3.21
+      env:
+        TZ: Asia/Tehran
+    steps:
+      - uses: actions/checkout@v4
+      - name: test
+        uses: robherley/go-test-action@v0
+
+  go-mod-tidy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: go-mod-tidy
+        uses: j0hnsmith/go-mod-check@v1
+
+  golangci-lint:
+    runs-on: ubuntu-latest
+    env:
+      GOLANGCI_LINT_VERSION: v1.63.4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: ${{ env.GOLANGCI_LINT_VERSION }}
