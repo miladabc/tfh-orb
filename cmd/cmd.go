@@ -20,6 +20,13 @@ func Execute() {
 					return app.StartGrpcServer()
 				},
 			},
+			{
+				Name:  "beat",
+				Usage: "send heartbeat request",
+				Action: func(*cli.Context) error {
+					return app.SendHeartbeatRequest()
+				},
+			},
 		},
 	}
 
