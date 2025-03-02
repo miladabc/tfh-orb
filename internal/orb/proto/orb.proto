@@ -1,7 +1,9 @@
 syntax = "proto3";
 package orb.v1;
 
-option go_package = "github.com/miladabc/tfh-orb/internal/orb/proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "internal/orb/proto";
 
 service OrbManagerService {
   // SendHeartbeat accepts a heartbeat message from an Orb device
@@ -16,7 +18,7 @@ message SendHeartbeatRequest {
   string device_id = 1;
   double latitude = 2;
   double longitude = 3;
-  string timestamp = 4;
+  google.protobuf.Timestamp timestamp = 4;
 }
 
 // SendHeartbeatResponse indicates if the heartbeat was processed successfully
@@ -35,5 +37,5 @@ message GetLatestLocationResponse {
   bool found = 1;
   double latitude = 2;
   double longitude = 3;
-  string timestamp = 4;
+  google.protobuf.Timestamp timestamp = 4;
 }

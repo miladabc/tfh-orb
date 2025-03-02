@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v5.29.3
-// source: orb.proto
+// source: internal/orb/proto/orb.proto
 
 package proto
 
@@ -159,5 +159,5 @@ var OrbManagerService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "orb.proto",
+	Metadata: "internal/orb/proto/orb.proto",
 }
