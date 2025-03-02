@@ -5,6 +5,7 @@ import (
 
 	"github.com/miladabc/tfh-orb/internal/orb/model"
 	"github.com/miladabc/tfh-orb/internal/orb/proto"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -35,12 +36,16 @@ func (c *Controller) SendHeartbeat(_ context.Context, req *proto.SendHeartbeatRe
 		return nil, status.Error(codes.InvalidArgument, "timestamp is required")
 	}
 
-	c.repo.StoreHeartbeat(model.Heartbeat{
+	hb := model.Heartbeat{
 		DeviceID:  req.DeviceId,
-		Lat:       req.Latitude,
-		Lng:       req.Longitude,
+		Latitude:  req.Latitude,
+		Longitude: req.Longitude,
 		Timestamp: req.Timestamp.AsTime(),
-	})
+	}
+
+	c.repo.StoreHeartbeat(hb)
+
+	log.Info().Any("beat", hb).Msg("new heartbeat received")
 
 	return &proto.SendHeartbeatResponse{
 		Success: true,
@@ -57,8 +62,8 @@ func (c *Controller) GetLatestLocation(_ context.Context, req *proto.GetLatestLo
 
 	return &proto.GetLatestLocationResponse{
 		Found:     exist,
-		Latitude:  hb.Lat,
-		Longitude: hb.Lng,
+		Latitude:  hb.Latitude,
+		Longitude: hb.Longitude,
 		Timestamp: timestamppb.New(hb.Timestamp),
 	}, nil
 }
