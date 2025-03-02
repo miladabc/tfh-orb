@@ -1,32 +1,24 @@
 package repo
 
 import (
-	"time"
-
+	"github.com/miladabc/tfh-orb/internal/orb/model"
 	"github.com/miladabc/tfh-orb/pkg/memory"
 )
 
 type Repository struct {
-	mem *memory.Memory[string, Heartbeat]
-}
-
-type Heartbeat struct {
-	DeviceID  string
-	Lat       float64
-	Lng       float64
-	Timestamp time.Time
+	mem *memory.Memory[string, model.Heartbeat]
 }
 
 func New() *Repository {
 	return &Repository{
-		mem: memory.New[string, Heartbeat](),
+		mem: memory.New[string, model.Heartbeat](),
 	}
 }
 
-func (r *Repository) StoreHeartbeat(hb Heartbeat) {
+func (r *Repository) StoreHeartbeat(hb model.Heartbeat) {
 	r.mem.Store(hb.DeviceID, hb)
 }
 
-func (r *Repository) GetLatestHeartbeat(deviceID string) (Heartbeat, bool) {
+func (r *Repository) GetLatestHeartbeat(deviceID string) (model.Heartbeat, bool) {
 	return r.mem.Get(deviceID)
 }

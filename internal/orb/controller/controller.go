@@ -3,8 +3,8 @@ package controller
 import (
 	"context"
 
+	"github.com/miladabc/tfh-orb/internal/orb/model"
 	"github.com/miladabc/tfh-orb/internal/orb/proto"
-	"github.com/miladabc/tfh-orb/internal/orb/repo"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -12,10 +12,15 @@ import (
 
 type Controller struct {
 	proto.UnimplementedOrbManagerServiceServer
-	repo *repo.Repository
+	repo Repository
 }
 
-func New(repo *repo.Repository) *Controller {
+type Repository interface {
+	StoreHeartbeat(hb model.Heartbeat)
+	GetLatestHeartbeat(deviceID string) (model.Heartbeat, bool)
+}
+
+func New(repo Repository) *Controller {
 	return &Controller{
 		repo: repo,
 	}
@@ -30,14 +35,12 @@ func (c *Controller) SendHeartbeat(_ context.Context, req *proto.SendHeartbeatRe
 		return nil, status.Error(codes.InvalidArgument, "timestamp is required")
 	}
 
-	hb := repo.Heartbeat{
+	c.repo.StoreHeartbeat(model.Heartbeat{
 		DeviceID:  req.DeviceId,
 		Lat:       req.Latitude,
 		Lng:       req.Longitude,
 		Timestamp: req.Timestamp.AsTime(),
-	}
-
-	c.repo.StoreHeartbeat(hb)
+	})
 
 	return &proto.SendHeartbeatResponse{
 		Success: true,
