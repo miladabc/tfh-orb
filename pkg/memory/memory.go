@@ -28,3 +28,10 @@ func (m *Memory[T, R]) Get(key T) (R, bool) {
 
 	return value, exist
 }
+
+func (m *Memory[T, R]) Len() int {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+
+	return len(m.buffer)
+}
