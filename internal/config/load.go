@@ -19,7 +19,7 @@ const (
 	keyDelim  = "."
 	tag       = "config"
 	fileName  = "config.yml"
-	envPrefix = "MYVAR_"
+	envPrefix = "TFH_ORB_"
 	envDelim  = "_"
 )
 
