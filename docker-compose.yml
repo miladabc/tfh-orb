@@ -1,0 +1,30 @@
+services:
+  server-dev:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    image: tfh/orb-dev
+    container_name: orb-server-dev
+    restart: unless-stopped
+    command: ["serve"]
+    environment:
+      TZ: Asia/Tehran
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./:/app
+
+  server-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tfh/orb-prod
+    container_name: orb-server-prod
+    restart: unless-stopped
+    command: ["serve"]
+    environment:
+      TZ: Asia/Tehran
+    ports:
+      - "50052:50051"
+    volumes:
+      - ./config.yml:/app/config.yml
